@@ -38,18 +38,6 @@ async function run() {
         const userCollection = client.db("arctools").collection("users");
         const purchaseCollection = client.db("arctools").collection("purchases");
 
-        const verifyAdmin = async (req, res, next) => {
-            const requester = req.decoded.email;
-            const requesterAccount = await userCollection.findOne({ email: requester });
-            if (requesterAccount.role === 'admin') {
-                next();
-            }
-            else {
-                res.status(403).send({ message: 'forbidden' });
-            }
-        }
-
-
         app.put("/users", async (req, res) => {
             const email = req.query.email;
             const user = req.body;

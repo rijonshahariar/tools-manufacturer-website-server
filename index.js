@@ -76,6 +76,19 @@ async function run() {
             );
             res.send(result);
         });
+
+        app.put("/purchaseById/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const updatePaid = {
+                $set: {
+                    status: 'delivered'
+                }
+            }
+            const result = await purchaseCollection.updateOne(filter, updatePaid);
+            res.send(result)
+        })
+
         app.put("/usersByEmail", async (req, res) => {
             const email = req.query.email;
             const mobile = req.body;
@@ -156,18 +169,18 @@ async function run() {
             const filter = { _id: ObjectId(id) };
             const updatedDoc = {
                 $set: item,
+                $set: {
+                    status: "delivered",
+                },
             };
             const result = await purchaseCollection.updateOne(filter, updatedDoc);
             res.send(result);
         });
+
         app.post("/create-payment-intent", async (req, res) => {
             const item = req.body;
             const price = item.price;
             const amount = price * 100;
-
-            if (amount > 999999) {
-                return res.send({ message: "Amount limit excess" });
-            }
 
             const paymentIntent = await stripe.paymentIntents.create({
                 amount: amount,

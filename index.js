@@ -79,8 +79,10 @@ async function run() {
 
         app.put("/purchaseById/:id", async (req, res) => {
             const id = req.params.id;
+            const item = req.body;
             const filter = { _id: ObjectId(id) };
             const updatePaid = {
+                $set: item,
                 $set: {
                     status: 'delivered'
                 }

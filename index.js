@@ -169,13 +169,12 @@ async function run() {
             const filter = { _id: ObjectId(id) };
             const updatedDoc = {
                 $set: item,
-                $set: {
-                    status: "delivered",
-                },
             };
             const result = await purchaseCollection.updateOne(filter, updatedDoc);
             res.send(result);
         });
+
+
 
         app.post("/create-payment-intent", async (req, res) => {
             const item = req.body;
